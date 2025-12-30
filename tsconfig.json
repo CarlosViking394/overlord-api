@@ -5,6 +5,7 @@
         "module": "commonjs",
         "target": "es2020",
         "outDir": "dist",
+        "rootDir": "src",
         "declaration": true,
         "declarationMap": true,
         "esModuleInterop": true,
@@ -12,8 +13,12 @@
         "isolatedModules": true,
         "moduleResolution": "node",
         "skipLibCheck": true,
-        "strict": true
+        "strict": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "resolveJsonModule": true
     },
-    "include": ["src"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "dist"]
 }
