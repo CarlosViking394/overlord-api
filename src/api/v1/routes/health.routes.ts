@@ -18,13 +18,7 @@ export function healthRoutes(
     // Overlord's own health check
     fastify.get(
         '/health',
-        {
-            schema: {
-                description: 'Health check for Overlord API',
-                tags: ['Health']
-            }
-        },
-        async (request: FastifyRequest, reply: FastifyReply) => {
+        async (_request: FastifyRequest, reply: FastifyReply) => {
             const response = ApiResponseBuilder.ok({
                 service: SERVICE_NAME,
                 version: API_VERSION,
@@ -39,13 +33,7 @@ export function healthRoutes(
     // Get aggregated health of all services
     fastify.get(
         '/health/all',
-        {
-            schema: {
-                description: 'Get aggregated health status of all registered services',
-                tags: ['Health']
-            }
-        },
-        async (request: FastifyRequest, reply: FastifyReply) => {
+        async (_request: FastifyRequest, reply: FastifyReply) => {
             const health = await healthService.getAggregatedHealth();
             const response = ApiResponseBuilder.ok(health);
             return reply.send(response);
@@ -55,13 +43,7 @@ export function healthRoutes(
     // Check health of all services (active check)
     fastify.post(
         '/health/check',
-        {
-            schema: {
-                description: 'Actively check health of all registered services',
-                tags: ['Health']
-            }
-        },
-        async (request: FastifyRequest, reply: FastifyReply) => {
+        async (_request: FastifyRequest, reply: FastifyReply) => {
             const health = await healthService.checkAllServices();
             const response = ApiResponseBuilder.ok(health);
             return reply.send(response);
@@ -73,8 +55,6 @@ export function healthRoutes(
         '/health/check/:serviceId',
         {
             schema: {
-                description: 'Actively check health of a specific service',
-                tags: ['Health'],
                 params: {
                     type: 'object',
                     properties: {
@@ -95,8 +75,6 @@ export function healthRoutes(
         '/health/:serviceId',
         {
             schema: {
-                description: 'Get cached health status of a specific service',
-                tags: ['Health'],
                 params: {
                     type: 'object',
                     properties: {

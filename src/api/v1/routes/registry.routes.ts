@@ -3,7 +3,7 @@
  */
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { IRegistryService, RegisterServiceRequest } from '../../../application/registry/RegistryService';
+import { IRegistryService } from '../../../application/registry/RegistryService';
 import { ApiResponseBuilder } from '../../responses/ApiResponse';
 import { ServiceType } from '../../../domain/shared/types';
 
@@ -34,8 +34,6 @@ export function registryRoutes(
         '/registry/services',
         {
             schema: {
-                description: 'Register a new service with the Overlord',
-                tags: ['Registry'],
                 body: {
                     type: 'object',
                     required: ['name', 'type', 'baseUrl'],
@@ -77,8 +75,6 @@ export function registryRoutes(
         '/registry/services',
         {
             schema: {
-                description: 'Get all registered services',
-                tags: ['Registry'],
                 querystring: {
                     type: 'object',
                     properties: {
@@ -106,8 +102,6 @@ export function registryRoutes(
         '/registry/services/:serviceId',
         {
             schema: {
-                description: 'Get a specific service by ID',
-                tags: ['Registry'],
                 params: {
                     type: 'object',
                     properties: {
@@ -128,8 +122,6 @@ export function registryRoutes(
         '/registry/services/:serviceId',
         {
             schema: {
-                description: 'Deregister a service',
-                tags: ['Registry'],
                 params: {
                     type: 'object',
                     properties: {
@@ -150,8 +142,6 @@ export function registryRoutes(
         '/registry/services/:serviceId/heartbeat',
         {
             schema: {
-                description: 'Send heartbeat for a service',
-                tags: ['Registry'],
                 params: {
                     type: 'object',
                     properties: {
@@ -172,8 +162,6 @@ export function registryRoutes(
         '/registry/services/capability/:capability',
         {
             schema: {
-                description: 'Find services by capability',
-                tags: ['Registry'],
                 params: {
                     type: 'object',
                     properties: {

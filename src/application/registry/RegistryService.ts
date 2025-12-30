@@ -3,9 +3,8 @@
  * Following BackEndMate's service orchestration pattern
  */
 
-import { Service, ServiceProps, ServiceSnapshot } from '../../domain/registry/Service';
+import { Service, ServiceSnapshot } from '../../domain/registry/Service';
 import { ServiceType, ServiceStatus } from '../../domain/shared/types';
-import { DomainError, ErrorCode } from '../../domain/shared/errors';
 import { throwIfNull } from '../../domain/shared/guards';
 import { IRegistryRepository } from './IRegistryRepository';
 import { IHealthService } from '../health/IHealthService';

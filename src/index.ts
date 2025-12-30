@@ -68,7 +68,7 @@ async function bootstrap() {
     eventsRoutes(fastify, eventService);
 
     // Root endpoint
-    fastify.get('/', async (request, reply) => {
+    fastify.get('/', async () => {
         return {
             service: SERVICE_NAME,
             version: API_VERSION,

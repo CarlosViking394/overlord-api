@@ -19,8 +19,6 @@ export function eventsRoutes(
         '/events',
         {
             schema: {
-                description: 'Get recent events',
-                tags: ['Events'],
                 querystring: {
                     type: 'object',
                     properties: {

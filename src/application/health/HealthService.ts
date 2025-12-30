@@ -46,7 +46,7 @@ export class HealthService implements IHealthService {
             if (response.ok) {
                 status = ServiceStatus.HEALTHY;
                 try {
-                    details = await response.json();
+                    details = await response.json() as Record<string, unknown>;
                 } catch {
                     // Response might not be JSON
                 }

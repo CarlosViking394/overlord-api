@@ -33,8 +33,6 @@ export function gatewayRoutes(
         '/api/:serviceId/*',
         {
             schema: {
-                description: 'Proxy GET request to a registered service',
-                tags: ['Gateway'],
                 params: {
                     type: 'object',
                     properties: {
@@ -63,8 +61,6 @@ export function gatewayRoutes(
         '/api/:serviceId/*',
         {
             schema: {
-                description: 'Proxy POST request to a registered service',
-                tags: ['Gateway'],
                 params: {
                     type: 'object',
                     properties: {
@@ -92,10 +88,6 @@ export function gatewayRoutes(
     fastify.put<{ Params: ProxyParams; Body: unknown }>(
         '/api/:serviceId/*',
         {
-            schema: {
-                description: 'Proxy PUT request to a registered service',
-                tags: ['Gateway']
-            }
         },
         async (request: FastifyRequest<{ Params: ProxyParams; Body: unknown }>, reply: FastifyReply) => {
             const path = '/' + request.params['*'];
@@ -115,10 +107,6 @@ export function gatewayRoutes(
     fastify.delete<{ Params: ProxyParams }>(
         '/api/:serviceId/*',
         {
-            schema: {
-                description: 'Proxy DELETE request to a registered service',
-                tags: ['Gateway']
-            }
         },
         async (request: FastifyRequest<{ Params: ProxyParams }>, reply: FastifyReply) => {
             const path = '/' + request.params['*'];
@@ -138,8 +126,6 @@ export function gatewayRoutes(
         '/dispatch/:serviceId',
         {
             schema: {
-                description: 'Dispatch a command to a specific service',
-                tags: ['Gateway'],
                 params: {
                     type: 'object',
                     properties: {
@@ -173,8 +159,6 @@ export function gatewayRoutes(
         '/dispatch/broadcast',
         {
             schema: {
-                description: 'Broadcast a message to all services of a type',
-                tags: ['Gateway'],
                 body: {
                     type: 'object',
                     required: ['serviceType', 'message'],

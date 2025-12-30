@@ -6,7 +6,7 @@ import { IRegistryRepository } from '../registry/IRegistryRepository';
 import { IGatewayService, ProxyRequest, ProxyResponse } from './IGatewayService';
 import { DomainError } from '../../domain/shared/errors';
 import { throwIfNull } from '../../domain/shared/guards';
-import { ServiceType, ServiceStatus } from '../../domain/shared/types';
+import { ServiceType } from '../../domain/shared/types';
 import { COMMAND_TIMEOUT_MS } from '../../domain/shared/constants';
 
 export class GatewayService implements IGatewayService {
