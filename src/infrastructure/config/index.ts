@@ -14,6 +14,22 @@ export interface ServerConfig {
     environment: 'development' | 'staging' | 'production';
 }
 
+export interface DatabaseConfig {
+    host: string;
+    port: number;
+    name: string;
+    user: string;
+    password: string;
+    poolSize: number;
+    url: string;
+}
+
+export interface RedisConfig {
+    host: string;
+    port: number;
+    password?: string;
+}
+
 export interface HealthConfig {
     checkIntervalMs: number;
     timeoutMs: number;
@@ -28,6 +44,8 @@ export interface AuthConfig {
 
 export interface AppConfig {
     server: ServerConfig;
+    database: DatabaseConfig;
+    redis: RedisConfig;
     health: HealthConfig;
     auth: AuthConfig;
 }
@@ -64,11 +82,31 @@ function getEnvBoolean(key: string, defaultValue: boolean): boolean {
 }
 
 export function loadConfig(): AppConfig {
+    const dbHost = getEnv('DB_HOST', 'localhost');
+    const dbPort = getEnvNumber('DB_PORT', 5432);
+    const dbName = getEnv('DB_NAME', 'overlord_db');
+    const dbUser = getEnv('DB_USER', 'overlord');
+    const dbPassword = getEnv('DB_PASSWORD', 'overlord_dev_password');
+
     return {
         server: {
             port: getEnvNumber('PORT', 3000),
             host: getEnv('HOST', '0.0.0.0'),
             environment: getEnv('NODE_ENV', 'development') as AppConfig['server']['environment']
+        },
+        database: {
+            host: dbHost,
+            port: dbPort,
+            name: dbName,
+            user: dbUser,
+            password: dbPassword,
+            poolSize: getEnvNumber('DB_POOL_SIZE', 10),
+            url: getEnv('DATABASE_URL', `postgresql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`)
+        },
+        redis: {
+            host: getEnv('REDIS_HOST', 'localhost'),
+            port: getEnvNumber('REDIS_PORT', 6379),
+            password: process.env.REDIS_PASSWORD
         },
         health: {
             checkIntervalMs: getEnvNumber('HEALTH_CHECK_INTERVAL_MS', 30000),
