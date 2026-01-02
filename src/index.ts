@@ -8,6 +8,7 @@
 
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import multipart from '@fastify/multipart';
 
 // Infrastructure
 import { getConfig } from './infrastructure/config';
@@ -18,6 +19,7 @@ import { RegistryService } from './application/registry/RegistryService';
 import { HealthService } from './application/health/HealthService';
 import { EventService } from './application/events/EventService';
 import { GatewayService } from './application/gateway/GatewayService';
+import { VoiceService } from './application/voice/VoiceService';
 
 // API
 import { errorHandler } from './api/middleware/errorHandler';
@@ -25,6 +27,7 @@ import { registryRoutes } from './api/v1/routes/registry.routes';
 import { healthRoutes } from './api/v1/routes/health.routes';
 import { gatewayRoutes } from './api/v1/routes/gateway.routes';
 import { eventsRoutes } from './api/v1/routes/events.routes';
+import { voiceRoutes } from './api/v1/routes/voice.routes';
 
 // Constants
 import { API_VERSION, SERVICE_NAME } from './domain/shared/constants';
@@ -45,6 +48,13 @@ async function bootstrap() {
         credentials: true
     });
 
+    // Register multipart for audio file uploads
+    await fastify.register(multipart, {
+        limits: {
+            fileSize: 10 * 1024 * 1024, // 10MB max
+        },
+    });
+
     // Set error handler
     fastify.setErrorHandler(errorHandler);
 
@@ -61,11 +71,28 @@ async function bootstrap() {
     );
     const gatewayService = new GatewayService(registryRepository);
 
+    // Initialize Voice Service (optional - requires AI API keys)
+    let voiceService: VoiceService | null = null;
+    if (process.env.OPENAI_API_KEY && process.env.ANTHROPIC_API_KEY && process.env.ELEVENLABS_API_KEY) {
+        voiceService = new VoiceService({
+            openaiApiKey: process.env.OPENAI_API_KEY,
+            anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+            elevenLabsApiKey: process.env.ELEVENLABS_API_KEY,
+            defaultVoiceId: process.env.CHARLIE_DEFAULT_VOICE,
+        });
+        console.log('Voice Service initialized with AI integrations');
+    } else {
+        console.log('Voice Service disabled - missing API keys');
+    }
+
     // Register routes (API layer)
     registryRoutes(fastify, registryService);
     healthRoutes(fastify, healthService);
     gatewayRoutes(fastify, gatewayService);
     eventsRoutes(fastify, eventService);
+    if (voiceService) {
+        voiceRoutes(fastify, voiceService);
+    }
 
     // Root endpoint
     fastify.get('/', async () => {
@@ -78,7 +105,8 @@ async function bootstrap() {
                 health: '/health',
                 gateway: '/api/:serviceId/*',
                 dispatch: '/dispatch/:serviceId',
-                events: '/events'
+                events: '/events',
+                voice: voiceService ? '/voice/command' : null,
             },
             documentation: '/docs'
         };
