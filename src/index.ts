@@ -28,6 +28,7 @@ import { healthRoutes } from './api/v1/routes/health.routes';
 import { gatewayRoutes } from './api/v1/routes/gateway.routes';
 import { eventsRoutes } from './api/v1/routes/events.routes';
 import { voiceRoutes } from './api/v1/routes/voice.routes';
+import { charlieRoutes } from './api/v1/routes/charlie.routes';
 
 // Constants
 import { API_VERSION, SERVICE_NAME } from './domain/shared/constants';
@@ -94,6 +95,10 @@ async function bootstrap() {
         voiceRoutes(fastify, voiceService);
     }
 
+    // Register Charlie AI routes
+    await fastify.register(charlieRoutes);
+    console.log('Charlie AI Service initialized');
+
     // Root endpoint
     fastify.get('/', async () => {
         return {
@@ -101,6 +106,8 @@ async function bootstrap() {
             version: API_VERSION,
             description: 'Overlord API - Control Plane for Agent Charlie Services',
             endpoints: {
+                charlie: '/charlie/chat',
+                projects: '/charlie/projects',
                 registry: '/registry/services',
                 health: '/health',
                 gateway: '/api/:serviceId/*',

@@ -90,7 +90,7 @@ export function loadConfig(): AppConfig {
 
     return {
         server: {
-            port: getEnvNumber('PORT', 3000),
+            port: getEnvNumber('PORT', 3001),
             host: getEnv('HOST', '0.0.0.0'),
             environment: getEnv('NODE_ENV', 'development') as AppConfig['server']['environment']
         },
